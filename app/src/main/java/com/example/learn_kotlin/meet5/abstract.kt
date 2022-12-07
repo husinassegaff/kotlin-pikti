@@ -2,7 +2,7 @@ package com.example.learn_kotlin.meet5
 
 abstract class Animal(var name: String, var weight: Double, var age: Int, var isCarnivore: Boolean){
 
-    fun eat(){
+    open fun eat(){
         println("$name sedang makan !")
     }
 
@@ -12,6 +12,11 @@ abstract class Animal(var name: String, var weight: Double, var age: Int, var is
 }
 
 class Cat(name: String, weight: Double, age: Int, isCarnivore: Boolean) : Animal(name, weight, age, isCarnivore){
+
+    override fun eat() {
+        println("$name sedang makan ikan !")
+    }
+
     fun meow(){
         println("Meow Meow")
     }

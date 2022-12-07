@@ -2,18 +2,26 @@ package com.example.learn_kotlin.meet5
 
 interface IFly {
     fun fly()
+    fun eat()
     val numberOfWings: Int
+    val numberOfLegs: Int
 }
 
-class Bird(override val numberOfWings: Int) : IFly {
-
+class Bird(override val numberOfWings: Int, override val numberOfLegs: Int) : IFly {
     override fun fly() {
-        if(numberOfWings > 0) println("Flying with $numberOfWings wings")
-        else println("I'm Flying without wings")
+        TODO("Not yet implemented")
     }
+
+    override fun eat() {
+        TODO("Not yet implemented")
+    }
+
+
 }
 
 fun main() {
-    val bird = Bird(2)
+
+
+    val bird = Bird(2, 2)
     bird.fly()
 }

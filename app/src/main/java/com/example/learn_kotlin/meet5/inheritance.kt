@@ -29,6 +29,13 @@ class CatInheritance(pName: String, pWeight: Double, pAge: Int, pIsCarnivore: Bo
         println("$name sedang memakan ikan !")
     }
 
+    fun eat(nameFood: String) {
+        println("$name sedang memakan $nameFood !")
+    }
+
+    fun eat(nameFood: String, total: Int) {
+        println("$name sedang memakan $nameFood sebanyak $total !")
+    }
     override fun sleep() {
         println("$name sedang tidur di bantal !")
     }
@@ -37,7 +44,7 @@ class CatInheritance(pName: String, pWeight: Double, pAge: Int, pIsCarnivore: Bo
 fun main(){
     val myCat = CatInheritance("Miaw", 3.2, 2, true, "Brown", 4)
 
-    myCat.playWithHuman()
     myCat.eat()
-    myCat.sleep()
+    myCat.eat("Wetfood")
+    myCat.eat("wetfood", 2)
 }

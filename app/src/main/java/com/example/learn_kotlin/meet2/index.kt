@@ -1,5 +1,7 @@
 package com.example.learn_kotlin.meet2
 
+import com.example.learn_kotlin.meet5.constructor.AnimalWithInit
+
 var a = 1
 
 fun main() {
@@ -7,6 +9,8 @@ fun main() {
     var officeOpen = 7
     var officeClose = 16
     var now = 8
+
+    var myCat = AnimalWithInit("Miaw", 4.2, -10, true)
 
     /*
         true = 1 , false = 0

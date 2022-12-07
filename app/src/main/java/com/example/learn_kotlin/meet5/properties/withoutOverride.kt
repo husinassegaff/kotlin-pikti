@@ -2,6 +2,14 @@ package com.example.learn_kotlin.meet5.properties
 
 class AnimalwithoutOverride{
     var name: String = "Miaw"
+
+    get() {
+        return field
+    }
+
+    set(value) {
+        field = value
+    }
 }
 
 fun main(){

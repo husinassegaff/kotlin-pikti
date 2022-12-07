@@ -1,8 +1,10 @@
 package com.example.learn_kotlin.meet5
 
 fun main() {
-    val someString = "Pikti"
+    val someString : String = "Pikti"
+    val someInt : Int = 5
+
     println(someString.reversed())
-    println(someString.toUpperCase())
-    println(someString.toLowerCase())
+    println(someString.uppercase())
+    println(someString.lowercase())
 }
