@@ -1,4 +1,4 @@
-package com.example.learn_kotlin.meet6
+package com.example.learn_kotlin.meet7
 import kotlinx.coroutines.*
 
 fun main() {

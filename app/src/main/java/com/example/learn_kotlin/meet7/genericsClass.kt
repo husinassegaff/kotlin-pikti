@@ -1,4 +1,4 @@
-package com.example.learn_kotlin.meet6
+package com.example.learn_kotlin.meet7
 
 class MyData<T>(val firstData: T) {
 
