@@ -15,9 +15,9 @@ fun main() {
     val myDataString = MyData<String>("String")
     val myDataInt = MyData<Int>(10)
 
-    var x = "${myDataInt.getData()} ${myDataString.getData()}"
+    val x = "${myDataInt.getData()} ${myDataString.getData()}"
 
-    myDataString.printFirstData()
-    myDataInt.printFirstData()
+    // myDataString.printFirstData()
+    // myDataInt.printFirstData()
     println(x)
 }
