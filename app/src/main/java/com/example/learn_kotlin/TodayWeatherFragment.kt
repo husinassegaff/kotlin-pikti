@@ -54,6 +54,9 @@ class TodayWeatherFragment : Fragment() {
                     binding.txtDateTime.text = result.dt?.let { Common.convertUnixToHour(it) }
                     binding.txtSunrise.text = result.sys?.sunrise?.let { Common.convertUnixToDate(it) }
                     binding.txtSunset.text = result.sys?.sunset?.let { Common.convertUnixToDate(it) }
+
+                    binding.weatherPanel.visibility = View.VISIBLE
+                    binding.loading.visibility = View.GONE
                 },
                 { t ->
                     t.printStackTrace()
