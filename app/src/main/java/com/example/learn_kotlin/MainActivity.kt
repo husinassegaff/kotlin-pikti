@@ -13,6 +13,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.learn_kotlin.adapter.ViewPagerAdapter
+import com.example.learn_kotlin.common.Common
 import com.example.learn_kotlin.databinding.ActivityMainBinding
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
@@ -31,7 +32,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var tabs : TabLayout
     private lateinit var coordinatorLayout: CoordinatorLayout
-    private lateinit var toolbar: Toolbar
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
@@ -42,10 +42,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupView()
-
         coordinatorLayout = binding.rootView
-        toolbar = binding.toolbar
 
         Dexter.withContext(this)
             .withPermissions(
@@ -79,19 +76,6 @@ class MainActivity : AppCompatActivity() {
             }).onSameThread().check()
     }
 
-    private fun setupView() {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
-        supportActionBar?.hide()
-    }
-
     private fun setupViewPager(viewPager: ViewPager2) {
         val viewPagerAdapter = ViewPagerAdapter(this)
         viewPager.adapter = viewPagerAdapter
@@ -121,7 +105,7 @@ class MainActivity : AppCompatActivity() {
                 }.attach()
 
                 location?.let {
-//                    Log.d("Location", "${it.latitude}, ${it.longitude}")
+                    Common.current_location = it
                 }
             }
         }
