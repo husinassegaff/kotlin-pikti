@@ -8,7 +8,7 @@
     <string name="temperature">25 C</string>
     <string name="date_time">Tanggal Sekarang</string>
     <string name="wind">Wind</string>
-    <string name="txt_wind">Speed: 1 Deg: 1</string>
+    <string name="txt_wind">10 km/h</string>
     <string name="pressure">Pressure</string>
     <string name="txt_pressure">1000.23 hpa</string>
     <string name="humidity">Humidity</string>
