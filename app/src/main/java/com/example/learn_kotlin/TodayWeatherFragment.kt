@@ -43,26 +43,22 @@ class TodayWeatherFragment : Fragment() {
         compositeDisposable.add(mService.getWeatherByLatLng(Common.current_location?.latitude.toString(), Common.current_location?.longitude.toString(), Common.APP_ID, "metric")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe() { weatherResult ->
-
-                binding.cityName.text = weatherResult.name
-                binding.txtDescription.text = StringBuilder("Weather in ${weatherResult.name}")
-                binding.txtTemperature.text = StringBuilder(weatherResult.main?.temp.toString()).append("°C").toString()
-                binding.txtDateTime.text = weatherResult.dt?.let { Common.convertUnixToDate(it) }
-                binding.txtWind.text = StringBuilder(weatherResult.wind?.speed.toString()).append("km/h").toString()
-                binding.txtPressure.text = StringBuilder("${weatherResult.main?.pressure} hpa").toString()
-                binding.txtHumidity.text = StringBuilder("${weatherResult.main?.humidity} %").toString()
-                binding.txtSunrise.text = weatherResult.sys?.sunrise?.let {
-                    Common.convertUnixToHour(
-                        it
-                    )
+            .subscribe(
+                { result ->
+                    binding.cityName.text = result.name
+                    binding.txtGeoCoordinate.text = result.coord.toString()
+                    binding.txtDescription.text = result.weather?.get(0)?.description ?: "N/A"
+                    binding.txtTemperature.text = result.main?.temp.toString()
+                    binding.txtDateTime.text = result.dt?.let { Common.convertUnixToDate(it) }
+                    binding.txtHumidity.text = result.main?.humidity.toString()
+                    binding.txtDateTime.text = result.dt?.let { Common.convertUnixToHour(it) }
+                    binding.txtSunrise.text = result.sys?.sunrise?.let { Common.convertUnixToDate(it) }
+                    binding.txtSunset.text = result.sys?.sunset?.let { Common.convertUnixToDate(it) }
+                },
+                { t ->
+                    t.printStackTrace()
                 }
-                binding.txtSunset.text = weatherResult.sys?.sunset?.let { Common.convertUnixToHour(it) }
-                binding.txtGeoCoordinate.text = StringBuilder("[${weatherResult.coord?.lat}, ${weatherResult.coord?.lon}]").toString()
-            })
+            )
+        )
     }
-
-
-
-
 }

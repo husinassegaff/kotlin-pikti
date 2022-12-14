@@ -5,8 +5,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class Common {
-    val APP_ID = "4ca775042db05cedbbe80895b18afb62"
-    var current_location: Location? = null
+    companion object {
+        val APP_ID = "4ca775042db05cedbbe80895b18afb62"
+        var current_location: Location? = null
 
         fun convertUnixToDate(dt: Int): String? {
             val date = Date(dt * 1000L)
@@ -20,5 +21,4 @@ class Common {
             return sdf.format(date)
         }
     }
-
 }
