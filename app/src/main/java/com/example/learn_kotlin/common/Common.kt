@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class Common {
+    companion object {
     val APP_ID = "4ca775042db05cedbbe80895b18afb62"
     var current_location: Location? = null
 
