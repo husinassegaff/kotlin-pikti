@@ -10,7 +10,14 @@ class Common {
 
     fun convertUnixToDate(dt: Int): String? {
         val date = Date(dt * 1000L)
+        val sdf = SimpleDateFormat("HH:mm")
+        return sdf.format(date)
+    }
+
+    fun convertUnixToHour(dt: Int): String? {
+        val date = Date(dt * 1000L)
         val sdf = SimpleDateFormat("HH:mm EEE MM yyyy")
         return sdf.format(date)
     }
+
 }
