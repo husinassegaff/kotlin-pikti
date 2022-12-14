@@ -1,16 +1,37 @@
 package com.example.learn_kotlin
 
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.view.WindowInsets
+import android.view.WindowManager
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.app.ActivityCompat
+import androidx.viewpager2.widget.ViewPager2
 import com.example.learn_kotlin.adapter.ViewPagerAdapter
 import com.example.learn_kotlin.databinding.ActivityMainBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.*
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.MultiplePermissionsReport
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    private lateinit var viewPager: ViewPager2
+    private lateinit var tabs : TabLayout
+    private lateinit var coordinatorLayout: CoordinatorLayout
+    private lateinit var toolbar: Toolbar
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
@@ -20,14 +41,60 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setupViewPager()
+
+        setupView()
+
+        coordinatorLayout = binding.rootView
+        toolbar = binding.toolbar
+
+        Dexter.withContext(this)
+            .withPermissions(
+                android.Manifest.permission.ACCESS_FINE_LOCATION,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            .withListener(object : MultiplePermissionsListener {
+                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                    if (report!!.areAllPermissionsGranted()) {
+                        buildLocationCallback()
+                        buildLocationRequest()
+
+                        if(ActivityCompat.checkSelfPermission(this@MainActivity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                            ActivityCompat.checkSelfPermission(this@MainActivity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            return
+                        }
+
+                        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this@MainActivity)
+                        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+                    }
+                }
+
+                override fun onPermissionRationaleShouldBeShown(
+                    permissions: MutableList<PermissionRequest>?,
+                    token: PermissionToken?
+                ) {
+                    //make snackbar "permission denied"
+                    Snackbar.make(coordinatorLayout, "Permission Denied", Snackbar.LENGTH_LONG)
+                        .show()
+                }
+            }).onSameThread().check()
     }
 
-    private fun setupViewPager(){
+    private fun setupView() {
+        @Suppress("DEPRECATION")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.hide(WindowInsets.Type.statusBars())
+        } else {
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+        }
+        supportActionBar?.hide()
+    }
+
+    private fun setupViewPager(viewPager: ViewPager2) {
         val viewPagerAdapter = ViewPagerAdapter(this)
-        val viewPager = binding.viewPager
         viewPager.adapter = viewPagerAdapter
-        val tabs = binding.tabs
     }
 
     private fun buildLocationRequest() {
@@ -37,8 +104,33 @@ class MainActivity : AppCompatActivity() {
             smallestDisplacement = 10f
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
+    }
 
-        //non deprecated equivalent from code above
+    private fun buildLocationCallback() {
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult) {
+                super.onLocationResult(p0)
+                val location = p0.lastLocation
 
+                viewPager = binding.viewPager
+                tabs = binding.tabs
+
+                setupViewPager(viewPager)
+                TabLayoutMediator(tabs, viewPager) { tab, position ->
+                    tab.text = resources.getString(TAB_TITLES[position])
+                }.attach()
+
+                location?.let {
+//                    Log.d("Location", "${it.latitude}, ${it.longitude}")
+                }
+            }
+        }
+    }
+
+    companion object {
+        @StringRes
+        private val TAB_TITLES = intArrayOf(
+            R.string.tab_text_1
+        )
     }
 }

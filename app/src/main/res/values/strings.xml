@@ -19,4 +19,7 @@
     <string name="txt_sunset">05.30 PM</string>
     <string name="geo_coordinate">Geo Coordinate</string>
     <string name="txt_geo_coordinate">[-123 , 456]</string>
+    <string name="tab_text_1">Today</string>
+
+
 </resources>
