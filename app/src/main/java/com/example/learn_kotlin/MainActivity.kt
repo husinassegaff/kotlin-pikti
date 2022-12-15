@@ -1,14 +1,9 @@
 package com.example.learn_kotlin
 
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.view.WindowInsets
-import android.view.WindowManager
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.viewpager2.widget.ViewPager2
@@ -114,7 +109,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         @StringRes
         private val TAB_TITLES = intArrayOf(
-            R.string.tab_text_1
+            R.string.tab_text_1,
+            R.string.tab_text_2
         )
     }
 }
