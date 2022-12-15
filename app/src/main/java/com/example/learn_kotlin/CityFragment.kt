@@ -5,28 +5,32 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.learn_kotlin.common.Common
-import com.example.learn_kotlin.databinding.FragmentTodayWeatherBinding
+import com.example.learn_kotlin.databinding.FragmentCityBinding
 import com.example.learn_kotlin.retrofit.IOpenWeatherMap
 import com.example.learn_kotlin.retrofit.RetrofitClient
+import com.mancj.materialsearchbar.MaterialSearchBar
 import com.squareup.picasso.Picasso
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 
-class TodayWeatherFragment : Fragment() {
+class CityFragment : Fragment() {
 
-    private lateinit var binding: FragmentTodayWeatherBinding
+    private lateinit var binding: FragmentCityBinding
     private lateinit var compositeDisposable: CompositeDisposable
     private lateinit var mService: IOpenWeatherMap
     private lateinit var retrofit: Retrofit
+    private lateinit var searchBar: MaterialSearchBar
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentTodayWeatherBinding.inflate(inflater, container, false)
+        binding = FragmentCityBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -36,12 +40,37 @@ class TodayWeatherFragment : Fragment() {
         compositeDisposable = CompositeDisposable()
         retrofit = RetrofitClient.loadData()
         mService = retrofit.create(IOpenWeatherMap::class.java)
+        searchBar = binding.searchBar
+        searchBar.setHint("Enter city")
 
-        getWeatherInformation()
+        searchBar.setOnSearchActionListener(object : MaterialSearchBar.OnSearchActionListener {
+            override fun onButtonClicked(buttonCode: Int) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onSearchStateChanged(enabled: Boolean) {
+                binding.loading.visibility = View.VISIBLE
+            }
+
+            override fun onSearchConfirmed(text: CharSequence?) {
+                if (text != null) {
+                    getWeatherInformation(text.toString())
+                }
+
+                if (text == null) {
+                    binding.loading.visibility = View.GONE
+                }
+            }
+
+        })
     }
 
-    private fun getWeatherInformation() {
-        compositeDisposable.add(mService.getWeatherByLatLng(Common.current_location?.latitude.toString(), Common.current_location?.longitude.toString(), Common.APP_ID, "metric")
+    private fun getWeatherInformation(city: String) {
+        compositeDisposable.add(mService.getWeatherByCityName(
+            city,
+            Common.APP_ID,
+            "metric"
+        )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -64,6 +93,8 @@ class TodayWeatherFragment : Fragment() {
                 },
                 { t ->
                     t.printStackTrace()
+                    binding.loading.visibility = View.GONE
+                    Toast.makeText(context, "Kota tidak ada", Toast.LENGTH_SHORT).show()
                 }
             )
         )
