@@ -1,5 +1,25 @@
 <resources>
     <string name="app_name">app_one</string>
     <!-- TODO: Remove or change this placeholder text -->
+
+
+
+    <!-- Fragment Today Weather    -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="txt_city_name">Cuaca di Sukolilo</string>
+    <string name="txt_temperature">25 C</string>
+    <string name="wind">Wind</string>
+    <string name="txt_wind">10 km/h</string>
+    <string name="pressure">Pressure</string>
+    <string name="txt_pressure">1000 hpa</string>
+    <string name="humidity">Humidity</string>
+    <string name="txt_humidity">100 %</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="txt_sunrise">05. 30 AM</string>
+    <string name="sunset">Sunset</string>
+    <string name="txt_sunset">05. 30 PM</string>
+    <string name="geoCoordinate">Geo Coordinate</string>
+    <string name="txt_geoCoordinate">[-123, 456]</string>
+    <string name="date_time">Tanggal Sekarang</string>
+
 </resources>

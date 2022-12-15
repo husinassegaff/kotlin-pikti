@@ -5,55 +5,73 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.pikti.app_one.common.Common
+import com.pikti.app_one.databinding.FragmentTodayWeatherBinding
+import com.pikti.app_one.retrofit.IOpenWeatherMap
+import com.pikti.app_one.retrofit.RetrofitClient
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import retrofit2.Retrofit
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TodayWeatherFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TodayWeatherFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentTodayWeatherBinding
+    private lateinit var compositeDisposable: CompositeDisposable
+    private lateinit var mService : IOpenWeatherMap
+    private lateinit var retrofit : Retrofit
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_today_weather, container, false)
+        binding = FragmentTodayWeatherBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TodayWeatherFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TodayWeatherFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        compositeDisposable = CompositeDisposable()
+        retrofit = RetrofitClient.loadData()
+        mService = retrofit.create(IOpenWeatherMap::class.java)
+
+        getWeatherInformation()
     }
+
+    private fun getWeatherInformation() {
+        compositeDisposable.add(
+            mService.getWeatherByLatLng(
+                Common.current_location?.latitude.toString(),
+                Common.current_location?.longitude.toString(),
+                Common.APP_ID,
+                "metric" )
+            .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { weatherResult ->
+                        binding.txtCityName.text = weatherResult.name
+                        binding.txtGeoCoordinate.text = weatherResult.coord.toString()
+                        binding.txtDescription.text = weatherResult.weather?.get(0)?.description ?: "N/A"
+                        binding.txtTemperature.text = weatherResult.main?.temp.toString()
+                        binding.txtDateTime.text = weatherResult.dt?.let { Common.convertUnixToDate(it)}
+                        binding.txtHumidity.text = weatherResult.main?.humidity.toString()
+                        binding.txtDateTime.text = weatherResult.dt?.let { Common.convertUnixToHour(it)}
+                        binding.txtSunrise.text = weatherResult.sys?.sunrise?.let { Common.convertUnixToDate(it) }
+                        binding.txtSunset.text = weatherResult.sys?.sunset?.let { Common.convertUnixToDate(it) }
+
+                        binding.weatherPanel.visibility = View.VISIBLE
+                        binding.loading.visibility = View.GONE
+
+                    },
+                    {
+                        it -> it.printStackTrace()
+                    }
+                )
+
+        )
+    }
+
+
 }
