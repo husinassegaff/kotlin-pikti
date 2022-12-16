@@ -110,7 +110,7 @@ data class CoordForecast(
 data class MainForecast(
 
 	@field:SerializedName("temp")
-	val temp: Any,
+	val temp: Double,
 
 	@field:SerializedName("temp_min")
 	val tempMin: Any,

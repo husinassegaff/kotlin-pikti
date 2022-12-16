@@ -18,12 +18,14 @@ class WeatherForecastAdapter(private val weatherForecastAdapter: ArrayList<ListI
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         val weatherForecast = weatherForecastAdapter[position]
+        var temp = weatherForecast.main?.temp
+        temp = temp?.minus(273.15)
 
         with(holder.binding) {
             Picasso.get().load("https://openweathermap.org/img/w/${weatherForecast.weather.get(0).icon}.png").into(imgWeather)
             txtDate.text = StringBuilder("${Common.convertUnixToDate(weatherForecast.dt)}")
             txtDescription.text = StringBuilder(weatherForecast.weather.get(0).description)
-            txtTemperature.text = StringBuilder("${weatherForecast.main.temp}°C")
+            txtTemperature.text = StringBuilder("${temp?.let { Math.round(it) }}°C")
         }
     }
 

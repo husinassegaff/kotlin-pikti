@@ -19,4 +19,9 @@ interface IOpenWeatherMap {
         @Query("appid") appid: String
     ) : Observable<WeatherForecastResponse>
 
+    @GET("weather")
+    fun getWeatherByCityName(@Query("q") cityName: String,
+                             @Query("appid") appid: String,
+                             @Query("units") units: String): Observable<WeatherResult>
+
 }

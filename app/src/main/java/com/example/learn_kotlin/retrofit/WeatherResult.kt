@@ -116,7 +116,7 @@ data class Clouds(
 data class Main(
 
     @field:SerializedName("temp")
-    val temp: Any? = null,
+    val temp: Double? = null,
 
     @field:SerializedName("temp_min")
     val tempMin: Any? = null,
