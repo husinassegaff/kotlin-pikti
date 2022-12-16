@@ -49,7 +49,8 @@ class CityFragment : Fragment() {
             }
 
             override fun onSearchStateChanged(enabled: Boolean) {
-                binding.loading.visibility = View.VISIBLE
+                val test = if (enabled) "enabled" else "disabled"
+                Toast.makeText(context, "Search $test", Toast.LENGTH_SHORT).show()
             }
 
             override fun onSearchConfirmed(text: CharSequence?) {
