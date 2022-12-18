@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">learn-kotlin</string>
+    <string name="app_name">notes_app</string>
+    <string name="title">Judul</string>
+    <string name="description">Deskripsi</string>
+    <string name="submit">Submit</string>
+    <string name="delete">Hapus</string>
+    <string name="date">Date</string>
 </resources>

@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "learn-kotlin"
+rootProject.name = "notes_app"
 include ':app'
